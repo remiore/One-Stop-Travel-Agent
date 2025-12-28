@@ -203,13 +203,171 @@ st.set_page_config(
     layout="wide"
 )
 
+# Custom CSS for Premium Black and White Theme
+st.markdown("""
+    <style>
+        /* Modern Minimalist Font Stack */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #000000;
+            --background-color: #ffffff;
+            --secondary-background-color: #fafafa;
+            --text-color: #000000;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html, body, [class*="css"] {
+            font-family: var(--font);
+            color: #000000;
+        }
+        
+        /* Main background */
+        .stApp {
+            background-color: #ffffff;
+        }
+        
+        /* Sidebar Polish */
+        section[data-testid="stSidebar"] {
+            background-color: #fafafa;
+            border-right: 2px solid #000000;
+        }
+        div[data-testid="stSidebarNav"] {
+            border-bottom: 2px solid #000000;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        /* Typography Hierarchy */
+        h1, h2, h3 {
+            font-weight: 700 !important;
+            letter-spacing: -0.02em !important;
+            text-transform: uppercase;
+        }
+        h1 { font-size: 2.5rem !important; margin-bottom: 1.5rem !important; }
+        h2 { font-size: 1.8rem !important; margin-top: 2rem !important; border-bottom: 2px solid black; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.4rem !important; }
+        
+        /* Inputs - Solid & Professional */
+        .stTextInput input, 
+        .stNumberInput input, 
+        .stDateInput input, 
+        .stTextArea textarea, 
+        .stSelectbox div[data-baseweb="select"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+            box-shadow: none !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 1rem !important;
+            font-weight: 500;
+        }
+
+        /* Focus state - Sharp & Clean */
+        .stTextInput input:focus, 
+        .stNumberInput input:focus, 
+        .stDateInput input:focus, 
+        .stTextArea textarea:focus,
+        .stSelectbox div[data-baseweb="select"]:focus-within {
+            border-color: #000000 !important;
+            background-color: #ffffee !important; /* Subtle tint to indicate active focus */
+        }
+        
+        /* Buttons - High Impact & Contrast */
+        div.stButton > button {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+            padding: 0.75rem 2rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+        /* Ensure text inside button inherits color */
+        div.stButton > button p {
+            color: #000000 !important;
+        }
+        
+        div.stButton > button:hover {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px 0px #000000 !important;
+        }
+        div.stButton > button:hover p {
+            color: #ffffff !important;
+        }
+        
+        div.stButton > button:active {
+            transform: translateY(0px);
+            box-shadow: 0px 0px 0px 0px #000000 !important;
+        }
+        
+        /* Download Button consistent with primary */
+        a[download] {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+            padding: 0.75rem 2rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        a[download]:hover {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* Multiselect refinement */
+        .stMultiSelect span[data-baseweb="tag"] {
+            background-color: #f0f0f0 !important;
+            color: #000000 !important;
+            border: 1px solid #000000 !important;
+            border-radius: 0px;
+            font-weight: 600;
+        }
+        
+        /* Alerts/Info boxes - Minimalist */
+        .stAlert {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+        }
+        
+        /* Labels */
+        label, .stText, p {
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+        
+        /* Expander/Accordion */
+        .streamlit-expanderHeader {
+            border: 2px solid #000000 !important;
+            border-radius: 0px !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # Initialize session state
 if 'itinerary' not in st.session_state:
     st.session_state.itinerary = None
 
 # Title and description
-st.title("✈️ MCP AI Travel Planner")
-st.caption("Plan your next adventure with AI Travel Planner using MCP servers for real-time data access")
+st.markdown("<h1 style='text-align: center;'>Bestie Travel Agent</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Your next adventure begin here...</p>", unsafe_allow_html=True)
 
 # Sidebar for API keys
 with st.sidebar:
@@ -235,7 +393,7 @@ with st.sidebar:
 # Main content (only shown if API keys are provided)
 if api_keys_provided:
     # Main input section
-    st.header("🌍 Trip Details")
+    st.header("Trip Details")
 
     col1, col2 = st.columns(2)
 
