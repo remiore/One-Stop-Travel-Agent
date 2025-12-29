@@ -220,6 +220,7 @@ def get_theme_css(theme):
         primary_color = "#ffffff"
         background_color = "#000000"
         secondary_background_color = "#111111"
+        sidebar_background_color = "#111111"
         text_color = "#ffffff"
         border_color = "#ffffff"
         input_bg = "#000000"
@@ -232,7 +233,8 @@ def get_theme_css(theme):
         # Light Mode Variables (Default)
         primary_color = "#000000"
         background_color = "#ffffff"
-        secondary_background_color = "#fafafa"
+        secondary_background_color = "#FFA500" # Orange for toggle visibility
+        sidebar_background_color = "#fafafa"
         text_color = "#000000"
         border_color = "#000000"
         input_bg = "#ffffff"
@@ -255,7 +257,7 @@ def get_theme_css(theme):
             --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }}
 
-        html, body, [class*="css"] {{
+        html, body {{
             font-family: var(--font);
             color: {text_color};
             background-color: {background_color};
@@ -269,7 +271,7 @@ def get_theme_css(theme):
         
         /* Sidebar Polish */
         section[data-testid="stSidebar"] {{
-            background-color: {secondary_background_color};
+            background-color: {sidebar_background_color};
             border-right: 2px solid {border_color};
         }}
         div[data-testid="stSidebarNav"] {{
@@ -407,8 +409,13 @@ def get_theme_css(theme):
         }}
         
         /* Checkbox/Radio */
-        .stCheckbox label, .stRadio label {{
+        .stCheckbox label, .stRadio label, .stToggle label {{
             color: {text_color} !important;
+        }}
+
+        /* Toggle Track - Force Color */
+        .stToggle div[data-baseweb="checkbox"] div {{
+            background-color: {secondary_background_color} !important;
         }}
     </style>
     """
@@ -450,7 +457,7 @@ if not st.session_state.setup_complete:
         """, unsafe_allow_html=True)
 
         with st.container(border=True):
-            st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>Setup Your Journey</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>We need a few things to get started</h3>", unsafe_allow_html=True)
             
             # Theme Toggle centered
             st.toggle(
