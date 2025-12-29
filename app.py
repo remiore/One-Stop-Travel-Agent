@@ -203,195 +203,324 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for Premium Black and White Theme
-st.markdown("""
+# Initialize session state for theme
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'light'
+
+def set_theme(key_name):
+    # Update theme based on the toggle state - Ensure it is a string!
+    # We use the key provided to check the specific widget state
+    is_dark = st.session_state.get(key_name, False)
+    st.session_state.theme = 'dark' if is_dark else 'light'
+
+# Dynamic CSS generation based on theme
+def get_theme_css(theme):
+    if theme == 'dark':
+        # Dark Mode Variables
+        primary_color = "#ffffff"
+        background_color = "#000000"
+        secondary_background_color = "#111111"
+        text_color = "#ffffff"
+        border_color = "#ffffff"
+        input_bg = "#000000"
+        button_bg = "#ffffff"
+        button_text = "#000000"
+        button_hover_bg = "#000000"
+        button_hover_text = "#ffffff"
+        shadow_color = "#ffffff"
+    else:
+        # Light Mode Variables (Default)
+        primary_color = "#000000"
+        background_color = "#ffffff"
+        secondary_background_color = "#fafafa"
+        text_color = "#000000"
+        border_color = "#000000"
+        input_bg = "#ffffff"
+        button_bg = "#ffffff"
+        button_text = "#000000"
+        button_hover_bg = "#000000"
+        button_hover_text = "#ffffff"
+        shadow_color = "#000000"
+
+    return f"""
     <style>
         /* Modern Minimalist Font Stack */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
-        :root {
-            --primary-color: #000000;
-            --background-color: #ffffff;
-            --secondary-background-color: #fafafa;
-            --text-color: #000000;
+        :root {{
+            --primary-color: {primary_color};
+            --background-color: {background_color};
+            --secondary-background-color: {secondary_background_color};
+            --text-color: {text_color};
             --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+        }}
 
-        html, body, [class*="css"] {
+        html, body, [class*="css"] {{
             font-family: var(--font);
-            color: #000000;
-        }
+            color: {text_color};
+            background-color: {background_color};
+        }}
         
         /* Main background */
-        .stApp {
-            background-color: #ffffff;
-        }
+        .stApp {{
+            background-color: {background_color};
+            color: {text_color};
+        }}
         
         /* Sidebar Polish */
-        section[data-testid="stSidebar"] {
-            background-color: #fafafa;
-            border-right: 2px solid #000000;
-        }
-        div[data-testid="stSidebarNav"] {
-            border-bottom: 2px solid #000000;
+        section[data-testid="stSidebar"] {{
+            background-color: {secondary_background_color};
+            border-right: 2px solid {border_color};
+        }}
+        div[data-testid="stSidebarNav"] {{
+            border-bottom: 2px solid {border_color};
             margin-bottom: 1rem;
             padding-bottom: 1rem;
-        }
+        }}
         
         /* Typography Hierarchy */
-        h1, h2, h3 {
+        h1, h2, h3 {{
             font-weight: 700 !important;
             letter-spacing: -0.02em !important;
             text-transform: uppercase;
-        }
-        h1 { font-size: 2.5rem !important; margin-bottom: 1.5rem !important; }
-        h2 { font-size: 1.8rem !important; margin-top: 2rem !important; border-bottom: 2px solid black; padding-bottom: 0.5rem; }
-        h3 { font-size: 1.4rem !important; }
+            color: {text_color} !important;
+        }}
+        h1 {{ font-size: 2.5rem !important; margin-bottom: 1.5rem !important; }}
+        h2 {{ font-size: 1.8rem !important; margin-top: 2rem !important; border-bottom: 2px solid {border_color}; padding-bottom: 0.5rem; }}
+        h3 {{ font-size: 1.4rem !important; }}
         
         /* Inputs - Solid & Professional */
         .stTextInput input, 
         .stNumberInput input, 
         .stDateInput input, 
         .stTextArea textarea, 
-        .stSelectbox div[data-baseweb="select"] {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #000000 !important;
+        .stSelectbox div[data-baseweb="select"] {{
+            background-color: {input_bg} !important;
+            color: {text_color} !important;
+            border: 2px solid {border_color} !important;
             border-radius: 0px !important;
             box-shadow: none !important;
             padding: 0.5rem 0.75rem !important;
             font-size: 1rem !important;
             font-weight: 500;
-        }
+        }}
+        
+        /* Input Labels */
+        .stTextInput label, .stNumberInput label, .stDateInput label, .stTextArea label, .stSelectbox label {{
+            color: {text_color} !important;
+        }}
 
         /* Focus state - Sharp & Clean */
         .stTextInput input:focus, 
         .stNumberInput input:focus, 
         .stDateInput input:focus, 
         .stTextArea textarea:focus,
-        .stSelectbox div[data-baseweb="select"]:focus-within {
-            border-color: #000000 !important;
-            background-color: #ffffee !important; /* Subtle tint to indicate active focus */
-        }
+        .stSelectbox div[data-baseweb="select"]:focus-within {{
+            border-color: {border_color} !important;
+            background-color: {secondary_background_color} !important; 
+        }}
         
         /* Buttons - High Impact & Contrast */
-        div.stButton > button {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #000000 !important;
+        div.stButton > button {{
+            background-color: {button_bg} !important;
+            color: {button_text} !important;
+            border: 2px solid {border_color} !important;
             border-radius: 0px !important;
             padding: 0.75rem 2rem !important;
             font-weight: 700 !important;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             transition: all 0.2s ease;
-        }
+        }}
         /* Ensure text inside button inherits color */
-        div.stButton > button p {
-            color: #000000 !important;
-        }
+        div.stButton > button p {{
+            color: {button_text} !important;
+        }}
         
-        div.stButton > button:hover {
-            background-color: #000000 !important;
-            color: #ffffff !important;
+        div.stButton > button:hover {{
+            background-color: {button_hover_bg} !important;
+            color: {button_hover_text} !important;
             transform: translateY(-2px);
-            box-shadow: 4px 4px 0px 0px #000000 !important;
-        }
-        div.stButton > button:hover p {
-            color: #ffffff !important;
-        }
+            box-shadow: 4px 4px 0px 0px {shadow_color} !important;
+            border: 2px solid {border_color} !important;
+        }}
+        div.stButton > button:hover p {{
+            color: {button_hover_text} !important;
+        }}
         
-        div.stButton > button:active {
+        div.stButton > button:active {{
             transform: translateY(0px);
-            box-shadow: 0px 0px 0px 0px #000000 !important;
-        }
+            box-shadow: 0px 0px 0px 0px {shadow_color} !important;
+        }}
         
         /* Download Button consistent with primary */
-        a[download] {
+        a[download] {{
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #000000 !important;
+            background-color: {button_bg} !important;
+            color: {button_text} !important;
+            border: 2px solid {border_color} !important;
             border-radius: 0px !important;
             padding: 0.75rem 2rem !important;
             font-weight: 700 !important;
             text-transform: uppercase;
             text-decoration: none;
             transition: all 0.2s ease;
-        }
-        a[download]:hover {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.2) !important;
-        }
+        }}
+        a[download]:hover {{
+            background-color: {button_hover_bg} !important;
+            color: {button_hover_text} !important;
+            box-shadow: 4px 4px 0px 0px {shadow_color} !important;
+        }}
         
         /* Multiselect refinement */
-        .stMultiSelect span[data-baseweb="tag"] {
-            background-color: #f0f0f0 !important;
-            color: #000000 !important;
-            border: 1px solid #000000 !important;
+        .stMultiSelect span[data-baseweb="tag"] {{
+            background-color: {secondary_background_color} !important;
+            color: {text_color} !important;
+            border: 1px solid {border_color} !important;
             border-radius: 0px;
             font-weight: 600;
-        }
+        }}
         
         /* Alerts/Info boxes - Minimalist */
-        .stAlert {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #000000 !important;
+        .stAlert {{
+            background-color: {background_color} !important;
+            color: {text_color} !important;
+            border: 2px solid {border_color} !important;
             border-radius: 0px !important;
-        }
+        }}
         
         /* Labels */
-        label, .stText, p {
-            color: #000000 !important;
+        label, .stText, p {{
+            color: {text_color} !important;
             font-weight: 600 !important;
             font-size: 0.95rem !important;
-        }
+        }}
         
         /* Expander/Accordion */
-        .streamlit-expanderHeader {
-            border: 2px solid #000000 !important;
+        .streamlit-expanderHeader {{
+            border: 2px solid {border_color} !important;
             border-radius: 0px !important;
-            background-color: #ffffff !important;
-            color: #000000 !important;
-        }
+            background-color: {background_color} !important;
+            color: {text_color} !important;
+        }}
+        
+        /* Checkbox/Radio */
+        .stCheckbox label, .stRadio label {{
+            color: {text_color} !important;
+        }}
     </style>
-""", unsafe_allow_html=True)
+    """
+
+# Inject Dynamic CSS
+st.markdown(get_theme_css(st.session_state.theme), unsafe_allow_html=True)
 
 # Initialize session state
 if 'itinerary' not in st.session_state:
     st.session_state.itinerary = None
 
-# Title and description
-st.markdown("<h1 style='text-align: center;'>Bestie Travel Agent</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Your next adventure begin here...</p>", unsafe_allow_html=True)
+# Initialize session state
+if 'itinerary' not in st.session_state:
+    st.session_state.itinerary = None
+if 'setup_complete' not in st.session_state:
+    st.session_state.setup_complete = False
+if 'gemini_api_key' not in st.session_state:
+    st.session_state.gemini_api_key = ''
+if 'google_maps_key' not in st.session_state:
+    st.session_state.google_maps_key = ''
 
-# Sidebar for API keys
-with st.sidebar:
-    st.header("🔑 API Keys Configuration")
-    st.warning("⚠️ These services require API keys:")
+# Helper function to reset the app
+def reset_app():
+    st.session_state.setup_complete = False
+    st.session_state.itinerary = None
+    # We keep the keys pre-filled for convenience, or clear them if strict security is needed.
+    # For user friendliness, let's keep them in session state but require clicking "Start" again.
 
-    gemini_api_key = st.text_input("Gemini API Key", type="password", help="Required for AI planning")
-    google_maps_key = st.text_input("Google Maps API Key", type="password", help="Required for location services")
+# --- SIGN IN PAGE (Configuration) ---
+if not st.session_state.setup_complete:
+    # Centered Container for "Sign In"
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown("""
+        <h1 style='text-align: center; margin-bottom: -35px; line-height: 1.0;'>Bestie Travel Agent</h1>
+        <p style='text-align: center; margin-top: 0px; font-size: 1.1rem;'>Your next adventure begin here...</p>
+        <div style='height: 30px;'></div>
+        """, unsafe_allow_html=True)
 
-    # Check if API keys are provided (both OpenAI and Google Maps are required)
-    api_keys_provided = gemini_api_key and google_maps_key
+        with st.container(border=True):
+            st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>Setup Your Journey</h3>", unsafe_allow_html=True)
+            
+            # Theme Toggle centered
+            st.toggle(
+                "Dark Mode", 
+                value=(st.session_state.theme == 'dark'), 
+                key='theme_toggle', 
+                on_change=set_theme,
+                kwargs={'key_name': 'theme_toggle'}
+            )
+            
+            st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+            
+            # API Keys Inputs
+            gemini_key_input = st.text_input(
+                "Gemini API Key", 
+                type="password", 
+                help="Required for AI planning",
+                value=st.session_state.gemini_api_key
+            )
+            
+            google_maps_key_input = st.text_input(
+                "Google Maps API Key", 
+                type="password", 
+                help="Required for location services",
+                value=st.session_state.google_maps_key
+            )
+            
+            st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+            
+            # Start Button
+            if st.button("Start Planning ✈️", use_container_width=True):
+                if gemini_key_input and google_maps_key_input:
+                    st.session_state.gemini_api_key = gemini_key_input
+                    st.session_state.google_maps_key = google_maps_key_input
+                    st.session_state.setup_complete = True
+                    st.rerun()
+                else:
+                    st.error("Please enter both API keys to continue.")
+                    st.info("""
+                    **Required API Keys:**
+                    - **Gemini API Key**: https://aistudio.google.com/app/apikey
+                    - **Google Maps API Key**: https://console.cloud.google.com/apis/credentials
+                    """)
 
-    if api_keys_provided:
-        st.success("✅ All API keys configured!")
-    else:
-        st.warning("⚠️ Please enter both API keys to use the travel planner.")
-        st.info("""
-        **Required API Keys:**
-        - **Gemini API Key**: https://aistudio.google.com/app/apikey
-        - **Google Maps API Key**: https://console.cloud.google.com/apis/credentials (for location services)
-        """)
+# --- MAIN APP INTERFACE ---
+else:
+    # Sidebar only shows Reset/Configuration button when logged in
+    with st.sidebar:
+        st.header("⚙️ Settings")
+        
+        # Theme Toggle in Sidebar (also available here)
+        st.toggle(
+            "Dark Mode", 
+            value=(st.session_state.theme == 'dark'), 
+            key='theme_toggle_sidebar', 
+            on_change=set_theme,
+            kwargs={'key_name': 'theme_toggle_sidebar'}
+        )
+        
+        st.divider()
+        if st.button("🔄 Reset Configuration", use_container_width=True):
+            reset_app()
+            st.rerun()
 
-# Main content (only shown if API keys are provided)
-if api_keys_provided:
+    # Title and description (Minimal version for main app)
+    st.markdown("""
+    <h1 style='text-align: center; margin-bottom: -35px; line-height: 1.0;'>Bestie Travel Agent</h1>
+    <p style='text-align: center; margin-top: 0px; font-size: 1.1rem;'>Your next adventure begin here...</p>
+    """, unsafe_allow_html=True)
+
     # Main input section
     st.header("Trip Details")
 
@@ -406,7 +535,7 @@ if api_keys_provided:
         start_date = st.date_input("Start Date", min_value=date.today(), value=date.today())
 
     # Preferences section
-    st.subheader("🎯 Travel Preferences")
+    st.subheader("Travel Preferences")
     preferences_input = st.text_area(
         "Describe your travel preferences",
         placeholder="e.g., adventure activities, cultural sites, food, relaxation, nightlife...",
@@ -442,7 +571,11 @@ if api_keys_provided:
                 st.warning("Please describe your preferences or select quick preferences.")
             else:
                 tools_message = "🏨 Connecting to Airbnb MCP"
-                if google_maps_key:
+                # Use stored keys
+                gemini_key = st.session_state.gemini_api_key
+                maps_key = st.session_state.google_maps_key
+                
+                if maps_key:
                     tools_message += " and Google Maps MCP"
                 tools_message += ", creating itinerary..."
 
@@ -454,8 +587,8 @@ if api_keys_provided:
                             num_days=num_days,
                             preferences=preferences,
                             budget=budget,
-                            gemini_key=gemini_api_key,
-                            google_maps_key=google_maps_key or ""
+                            gemini_key=gemini_key,
+                            google_maps_key=maps_key
                         )
 
                         # Store the response in session state
