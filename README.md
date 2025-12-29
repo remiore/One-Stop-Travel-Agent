@@ -1,4 +1,4 @@
-## 🌍 MCP Travel Planner Agent Team
+## Travel Agent
 
 A sophisticated Streamlit-based AI travel planning application that creates extremely detailed, personalized travel itineraries using multiple MCP servers and Google Maps integration. The app uses Airbnb MCP for real accommodation data and a custom Google Maps MCP for precise distance calculations and location services.
 
@@ -55,8 +55,7 @@ A sophisticated Streamlit-based AI travel planning application that creates extr
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/Shubhamsaboo/awesome-llm-apps.git
-   cd awesome-llm-apps/mcp_ai_agents/ai_travel_planner_mcp_agent_team
+   git clone https://github.com/remiore/One-Stop-Travel-Agent
    ```
 
 2. Install the required Python packages:
