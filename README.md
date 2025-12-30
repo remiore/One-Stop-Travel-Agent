@@ -1,5 +1,4 @@
-## 🌍 Travel Planner with MCP
-
+## Travel Agent
 A powerful Streamlit-based AI travel planning application that generates highly detailed, personalized travel itineraries using multiple MCP servers and Google Maps integration. The app leverages Airbnb MCP for real accommodation data and a custom Google Maps MCP for accurate distance calculations, travel times, and location services.
 
 ## ✨ Features
