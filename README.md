@@ -108,6 +108,6 @@ End-to-end generation means the agent autonomously gathers all required data, re
 
 - Network restrictions may block MCP connections
 
-##Acknowledgements
-greatful for the learning from 
+## Acknowledgements
+Greatful for the learning from 
 https://github.com/Shubhamsaboo
