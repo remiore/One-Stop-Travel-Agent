@@ -577,14 +577,12 @@ else:
             elif not preferences:
                 st.warning("Please describe your preferences or select quick preferences.")
             else:
-                tools_message = "🏨 Connecting to Airbnb MCP"
+                
                 # Use stored keys
                 gemini_key = st.session_state.gemini_api_key
                 maps_key = st.session_state.google_maps_key
-                
-                if maps_key:
-                    tools_message += " and Google Maps MCP"
-                tools_message += ", creating itinerary..."
+
+                tools_message = "Creating your itinerary..."
 
                 with st.spinner(tools_message):
                     try:
