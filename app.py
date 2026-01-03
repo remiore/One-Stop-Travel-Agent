@@ -524,7 +524,7 @@ else:
 
     # Title and description (Minimal version for main app)
     st.markdown("""
-    <h1 style='text-align: center; margin-bottom: -35px; line-height: 1.0;'>Bestie Travel Agent</h1>
+    <h1 style='text-align: center; margin-bottom: -35px; line-height: 1.0;'>TripSynth</h1>
     <p style='text-align: center; margin-top: 0px; font-size: 1.1rem;'>Your next adventure begin here...</p>
     """, unsafe_allow_html=True)
 
