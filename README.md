@@ -1,131 +1,109 @@
-## Travel Agent
-A powerful Streamlit-based AI travel planning application that generates highly detailed, personalized travel itineraries using multiple MCP servers and Google Maps integration. The app leverages Airbnb MCP for real accommodation data and a custom Google Maps MCP for accurate distance calculations, travel times, and location services.
 
-## ✨ Features
+# Travel Agent with MCP
 
-### 🤖 AI-Powered Travel Planning
-- **Extremely Detailed Itineraries**: Creates comprehensive day-by-day schedules with specific timing, addresses, and costs
-- **Distance Calculations**: Uses Google Maps MCP to calculate precise distances and travel times between all locations
-- **Real-Time Accommodation Data**: Integrates with Airbnb MCP for current pricing and availability
-- **Personalized Recommendations**: Customizes itineraries based on user preferences and budget constraints
+A Streamlit-based AI travel planning application that generates detailed, personalized itineraries using MCP servers and Google Maps. The app integrates Airbnb MCP for real accommodation data and a custom Google Maps MCP for accurate distances, travel times, and location services.
 
-### 🏨 Airbnb MCP Integration
-- **Real accommodation listings** with current pricing and availability
-- **Property details** including amenities, guest reviews, and booking availability
-- **Budget-conscious recommendations** filtered by location and preferences
-- **Direct booking information** with real-time rates
+## Agent Architecture
+The system follows an end-to-end agent workflow that plans, validates, and assembles a complete travel itinerary in a single execution.
 
-### 🗺️ Google Maps MCP Integration
-- **Precise distance calculations** between all locations in the itinerary
-- **Travel time estimates** for transportation planning
-- **Location services** for points of interest and navigation
-- **Address verification** for all recommended places
-- **Transportation optimization** with turn-by-turn guidance
+Gemini 2.5 Flash-Lite acts as the central reasoning engine, interpreting user inputs (destination, dates, budget, preferences) and decomposing the trip into structured planning steps such as lodging, daily activities, transportation, and timing.
 
-### 🔍 Google Search Integration
-- **Current weather forecasts** with detailed clothing recommendations
-- **Restaurant research** with specific addresses, price ranges, and reviews
-- **Attraction details** including opening hours, ticket prices, and best visiting times
-- **Local insights** and cultural information
-- **Practical travel tips** including currency exchange and safety information
+Airbnb MCP is queried to retrieve real accommodation listings with live pricing, availability, amenities, and location data. These results are evaluated against the user’s budget and proximity requirements.
 
-### 📅 Additional Features
-- **Calendar Export**: Download your itinerary as a .ics file for Google Calendar, Apple Calendar, or Outlook
-- **Comprehensive Cost Breakdown**: Detailed budget analysis for all trip components
-- **Buffer Time Planning**: Includes travel time and unexpected delays in scheduling
-- **Multiple Accommodation Options**: Provides 3 accommodation choices with distances from city center
+Google Maps MCP is used to calculate precise distances, travel times, and route feasibility between accommodations, attractions, and restaurants, ensuring the itinerary is geographically realistic and time-aware.
+
+Google Search tools provide up-to-date external context, including weather forecasts, attraction details, operating hours, reviews, and local insights, which are incorporated into daily planning decisions.
+
+End-to-end generation means the agent autonomously gathers all required data, reasons across multiple tools, resolves conflicts (time, distance, budget), and outputs a complete, actionable itinerary without asking follow-up questions.
+## Features
+
+**AI-Powered Travel Planning**
+
+- Detailed Itineraries: Day-by-day schedules with timing, addresses, and estimated costs
+
+- Accurate Distance & Travel Time: Powered by Google Maps MCP
+
+- Real Accommodation Data: Live pricing and availability via Airbnb MCP
+
+- Personalized Plans: Tailored to user preferences and budget
+
+**Airbnb MCP Integration**
+
+- Real Airbnb listings with current pricing
+
+- Property details including amenities and reviews
+
+- Budget-filtered recommendations
+
+- Real-time booking information
+
+**Google Maps MCP Integration**
+
+- Precise distance calculations
+
+- Reliable travel time estimates
+
+- Location and address verification
+
+- Optimized transportation routing
+
+**Google Search Integration**
+
+- Current weather forecasts
+
+- Restaurant and attraction details
+
+- Local insights and cultural tips
+
+- Practical travel information
+
+**Additional Features**
+
+- Calendar Export (.ics for Google, Apple, Outlook)\
+- Email Export
+- Cost Breakdown for all trip components
+- Reviews from other travelers via Google maps api
+- Built-in Buffer Time for delays
+- Multiple Lodging Options per destination
 
 
-## Setup
+## Local Setup
+**Requirements**
 
-### Requirements
+**1. API Keys:**
 
-1. **API Keys** (Both Required):
-    - **OpenAI API Key**: Get your API key from [OpenAI Platform](https://platform.openai.com/api-keys)
-    - **Google Maps API Key**: Get your API key from [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+- Gemini API Key https://aistudio.google.com/
 
-2. **Python 3.8+**: Ensure you have Python 3.8 or higher installed.
+- Google Maps API Key https://mapsplatform.google.com/
 
-3. **MCP Servers**: The app automatically connects to:
-    - **Airbnb MCP Server**: Provides real Airbnb listings and pricing data
-    - **Custom Google Maps MCP**: Enables precise distance calculations and location services
+**2. Python 3.8+**
 
-### Installation
+- MCP Servers:
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/remiore/One-Stop-Travel-Agent.git
-   ```
+- Airbnb MCP Server
 
-2. Install the required Python packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+- Custom Google Maps MCP
 
-### Running the App
+## Installation
+```bash
+  git clone https://github.com/remiore/One-Stop-Travel-Agent.git
+  pip install -r requirements.txt
+```
 
-1. Start the Streamlit app:
-   ```bash
-   streamlit run app.py
-   ```
+## Running the App
+```bash
+  streamlit run app.py
+```
+- Enter your API keys in the interface
 
-2. In the app interface:
-   - Enter your **OpenAI API key** in the sidebar
-   - Enter your **Google Maps API key** in the sidebar
-   - Specify your destination, trip duration, budget, and preferences
-   - Click "🎯 Generate Itinerary" to create your detailed travel plan
+- Set destination, dates, budget, and preferences
 
-3. **Optional**: Download your itinerary as a calendar file (.ics) for import into Google Calendar, Apple Calendar, or Outlook
+- Click Generate Itinerary
 
 ## Troubleshooting
 
-### Common Issues & Solutions
+- Verify API keys if errors occur
 
-- **"Error: [error message]"**: Check your internet connection and API keys
-  - Verify both OpenAI and Google Maps API keys are entered correctly
-  - Try again in a few minutes - the MCP servers may be temporarily unavailable
+- Allow time for responses (up to 60 seconds)
 
-- **Missing distance information**: Google Maps MCP connection issue
-  - Check your Google Maps API key validity
-  - Ensure your API key has the necessary permissions for Maps API
-  - Try refreshing the page and entering the keys again
-
-- **Slow response times**: MCP servers can take time to respond
-  - The app has a 60-second timeout configured
-  - Wait for the process to complete - detailed itineraries take time to generate
-
-- **Network/Firewall issues**: Some corporate networks may block MCP connections
-  - Try from a different network
-  - Use a VPN if necessary
-  - The app will show connection errors if MCP servers are unreachable
-
-### API Key Issues
-
-- **OpenAI API Key**: Make sure you have credits in your OpenAI account and the key is valid
-- **Google Maps API Key**: Ensure the key has Maps API enabled and proper billing setup
-
-### Tool Status
-
-The app will show you which data sources were successfully used:
-- 🏨 **"Your travel itinerary is ready with Airbnb data!"** = Airbnb MCP connected successfully
-- 📝 **"Used general knowledge for accommodation suggestions"** = Airbnb MCP failed, using general knowledge as fallback
-
-**The app is designed to work reliably!** Even if MCP connections fail, it will generate comprehensive itineraries using available tools and information.
-
-## Project Structure
-
-```
-├── app.py              # Main Streamlit application with MCP integration
-├── requirements.txt    # Python dependencies
-└── README.md          # This documentation
-```
-
-## How It Works
-
-The AI Travel Planner Agent Team uses a sophisticated multi-step process to create extremely detailed travel itineraries:
-
-### 🤖 AI Agent Architecture
-- **GPT-4o Model**: Powers the intelligent travel planning with advanced reasoning capabilities
-- **Multi-MCP Integration**: Combines Airbnb and Google Maps MCP servers for real-time data
-- **Google Search Tools**: Provides current weather, reviews, and local insights
-- **Direct Response Generation**: Creates complete itineraries without asking clarifying questions
+- Network restrictions may block MCP connections
